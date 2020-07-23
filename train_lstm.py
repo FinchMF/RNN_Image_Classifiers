@@ -63,36 +63,41 @@ for epoch in range(d.params['num_epochs']):
 
         if torch.cuda.is_available():
             loss.cuda()
-            iter += 1
+        loss.backward()
 
-            if iter % 500 == 0:
+        optimizer.step()
 
-                correct = 0
-                total = 0
+        loss_list.append(loss.item())
+        iter += 1
 
-                for images, labels in d.test_loader:
-                    if torch.cuda.is_available():
-                        images =  Variable(images.view(-1, net_params['sequence_dim'], net_params['input_dim']).cuda())
+        if iter % 500 == 0:
 
-                    else:
-                        images = Variable(images.view(-1, net_params['sequence_dim'], net_params['input_dim']))
+            correct = 0
+            total = 0
+
+            for images, labels in d.test_loader:
+                if torch.cuda.is_available():
+                    images =  Variable(images.view(-1, net_params['sequence_dim'], net_params['input_dim']).cuda())
+
+                else:
+                    images = Variable(images.view(-1, net_params['sequence_dim'], net_params['input_dim']))
 
 
-                    outputs = LSTM_Classifier(images)
+                outputs = LSTM_Classifier(images)
 
-                    _, pred = torch.max(outputs.data, 1)
+                _, pred = torch.max(outputs.data, 1)
 
-                    total += labels.size(0)
+                total += labels.size(0)
 
-                    if torch.cuda.is_available():
-                        correct += (pred.cpu() == labels.cpu()).sum()
-                    
-                    else:
-                        correct += (pred == labels).sum()
+                if torch.cuda.is_available():
+                    correct += (pred.cpu() == labels.cpu()).sum()
                 
-                accuracy = 100 * correct / total
+                else:
+                    correct += (pred == labels).sum()
+            
+            accuracy = 100 * correct // total
 
-                print(f'Iteration: {iter}.. | Loss: {loss.item()}.. | Accuracy: {accuracy}..')
+            print(f'Iteration: {iter}.. | Loss: {loss.item()}.. | Accuracy: {accuracy}%..')
 
 
 
@@ -103,6 +108,6 @@ for epoch in range(d.params['num_epochs']):
 with open('network_loss_lstm.txt', 'w') as f:
     for loss in loss_list:
         f.write(f'{loss} \n')
-        f.close()
+    f.close()
 
 

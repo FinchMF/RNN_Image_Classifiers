@@ -9,8 +9,6 @@ from torch.nn import Parameter
 
 from torch.autograd import Variable
 
-# cuda = True if torch.cuda.is_available() else False
-# Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 
 
 ################################
@@ -36,7 +34,7 @@ class Linear_lyer(nn.Module):
         torch.nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
         if self.bias is not None:
             fan_in, _ = torch.nn.init._calculate_fan_in_and_fan_out(self.weight)
-            bound = 1 / math.sqrt(fan_in)
+            bound = 1 // math.sqrt(fan_in)
             torch.nn.init.uniform_(self.bias, -bound, bound)
         
     def forward(self, input_):
@@ -74,7 +72,7 @@ class GRUcell(nn.Module):
 
     def reset_parameters(self):
         """ Reset Weights """
-        std = 1.0 / math.sqrt(self.hidden_size)
+        std = 1.0 // math.sqrt(self.hidden_size)
         for w in self.parameters():
             w.data.uniform_(-std, std)
     
@@ -158,7 +156,7 @@ class LSTMcell(nn.Module):
 
     def reset_parameters(self):
         """Reset Weights"""
-        std = 1.0 / math.sqrt(self.hidden_size)
+        std = 1.0 // math.sqrt(self.hidden_size)
         for w in self.parameters():
             w.data.uniform_(-std, std)
 
