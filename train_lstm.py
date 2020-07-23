@@ -41,6 +41,7 @@ optimizer = torch.optim.SGD(LSTM_Classifier.parameters(), lr=lr)
 #################
 
 loss_list = []
+accuracy_list = []
 iter = 0
 
 for epoch in range(d.params['num_epochs']):
@@ -94,6 +95,7 @@ for epoch in range(d.params['num_epochs']):
                     correct += (pred == labels).sum()
             
             accuracy = 100 * correct // total
+            accuracy_list.append(accuracy)
 
             print(f'Iteration: {iter}.. | Loss: {loss.item()}.. | Accuracy: {accuracy}%..')
 
@@ -108,4 +110,8 @@ with open('network_loss_lstm.txt', 'w') as f:
         f.write(f'{loss} \n')
     f.close()
 
+with open('network_accuracy_lstm.txt', 'w') as f:
+    for acc in accuracy_list:
+        f.write(f'{acc} \n')
+    f.close()
 
