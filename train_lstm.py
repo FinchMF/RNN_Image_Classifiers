@@ -7,8 +7,6 @@ from rnn_models import LSTMmodel
 import nn_config as config
 import data as d
 
-# cuda = True if torch.cuda.is_available() else False
-# Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 
 #####################################
 # INITIALIZE NETWORK and PARAMETERS #

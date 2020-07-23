@@ -172,14 +172,14 @@ class LSTMcell(nn.Module):
 
         ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
 
-        ingate = F.sigmoid(ingate)
-        forgetgate = F.sigmoid(forgetgate)
-        cellgate = F.tanh(cellgate)
-        outgate = F.sigmoid(outgate)
+        ingate = torch.sigmoid(ingate)
+        forgetgate = torch.sigmoid(forgetgate)
+        cellgate = torch.tanh(cellgate)
+        outgate = torch.sigmoid(outgate)
 
         cy = torch.mul(cx, forgetgate) + torch.mul(ingate, cellgate)
 
-        hy = torch.mul(outgate, F.tanh(cy))
+        hy = torch.mul(outgate, torch.tanh(cy))
 
         return (hy, cy)
 
@@ -201,7 +201,7 @@ class LSTMmodel(nn.Module):
 
         self.fc = Linear_lyer(hidden_dim, output_dim)
 
-    def foward(self, x):
+    def forward(self, x):
         """ Forward Pass """
         if torch.cuda.is_available():
             h0 = Variable(torch.zeros(self.n_layer, x.size(0), self.hidden_dim).cuda())
